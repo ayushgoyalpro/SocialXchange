@@ -1,12 +1,19 @@
 package com.socialxchange.soco_backend.api;
 
+import com.socialxchange.soco_backend.config.Utility;
 import com.socialxchange.soco_backend.config.database.User;
 import com.socialxchange.soco_backend.config.database.repositories.UserRepository;
+import jdk.jshell.execution.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -17,6 +24,11 @@ public class UserController {
     // Create a new user
     @PostMapping
     public User createUser(@RequestBody User user) {
+        try {
+            user.setPassword(Utility.hashPassword(user.getPassword()));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            log.error(e.getMessage());
+        }
         return userRepository.save(user);
     }
 
@@ -38,7 +50,7 @@ public class UserController {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id " + id));
 
         user.setEmail(userDetails.getEmail());
-        user.setPasswordHash(userDetails.getPasswordHash());
+        user.setPassword(userDetails.getPassword());
 
         return userRepository.save(user);
     }
