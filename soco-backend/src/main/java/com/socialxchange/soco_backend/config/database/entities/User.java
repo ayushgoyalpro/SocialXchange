@@ -1,5 +1,6 @@
-package com.socialxchange.soco_backend.config.database;
+package com.socialxchange.soco_backend.config.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     @Id
@@ -22,8 +24,11 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Transient
     private String password;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

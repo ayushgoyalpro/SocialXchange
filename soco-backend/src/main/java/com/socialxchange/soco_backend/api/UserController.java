@@ -1,9 +1,10 @@
 package com.socialxchange.soco_backend.api;
 
 import com.socialxchange.soco_backend.config.Utility;
-import com.socialxchange.soco_backend.config.database.User;
+import com.socialxchange.soco_backend.config.database.entities.User;
 import com.socialxchange.soco_backend.config.database.repositories.UserRepository;
-import jdk.jshell.execution.Util;
+import com.socialxchange.soco_backend.config.dto.AuthToken;
+import com.socialxchange.soco_backend.config.exceptions.InternalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -21,44 +21,37 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // Create a new user
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        try {
-            user.setPassword(Utility.hashPassword(user.getPassword()));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            log.error(e.getMessage());
-        }
-        return userRepository.save(user);
-    }
-
-    // Get all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<AuthToken> login(@RequestBody User user) throws InternalException {
+        log.info("Login API called: Received: {}", user.getEmail());
+        User userFound = userRepository.findByEmail(user.getEmail());
+        if(userFound == null) {
+            throw new InternalException("Wrong credentials");
+        }
+        else {
+            try {
+                if (Utility.validatePassword(user.getPassword(), userFound.getPasswordHash())) {
+                    return ResponseEntity.ok(new AuthToken("TOKEN"));
+                }
+                else {
+                    throw new InternalException("Wrong credentials");
+                }
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                throw new InternalException(e.getMessage());
+            }
+        }
     }
 
-    // Get a user by ID
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id " + id));
-    }
-
-    // Update a user
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id " + id));
-
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
-
-        return userRepository.save(user);
-    }
-
-    // Delete a user
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id " + id));
-        userRepository.delete(user);
+    @PostMapping
+    public User register(@RequestBody User user) throws InternalException {
+        log.info("Register API called: Received: {}", user.getEmail());
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        try {
+            newUser.setPasswordHash(Utility.hashPassword(user.getPassword()));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new InternalException(e.getMessage());
+        }
+        return userRepository.save(newUser);
     }
 }

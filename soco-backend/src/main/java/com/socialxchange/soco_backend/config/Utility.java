@@ -19,8 +19,7 @@ public class Utility {
         return Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(hash);
     }
 
-    public static boolean validatePassword(String originalPassword, String storedPassword)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String[] parts = storedPassword.split(":");
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         byte[] hash = Base64.getDecoder().decode(parts[1]);
@@ -28,8 +27,7 @@ public class Utility {
         return slowEquals(hash, testHash);
     }
 
-    private static byte[] pbkdf2(char[] password, byte[] salt)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static byte[] pbkdf2(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, Utility.ITERATIONS, Utility.KEY_LENGTH);
         SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
         return skf.generateSecret(spec).getEncoded();
