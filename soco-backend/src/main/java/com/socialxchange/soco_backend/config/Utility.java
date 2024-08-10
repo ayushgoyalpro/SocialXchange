@@ -1,5 +1,7 @@
 package com.socialxchange.soco_backend.config;
 
+import com.socialxchange.soco_backend.config.exceptions.InternalException;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -13,17 +15,27 @@ public class Utility {
     private static final int KEY_LENGTH = 256;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
 
-    public static String hashPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static String hashPassword(String password) throws InternalException {
         byte[] salt = generateSalt();
-        byte[] hash = pbkdf2(password.toCharArray(), salt);
+        byte[] hash = null;
+        try {
+            hash = pbkdf2(password.toCharArray(), salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new InternalException(e.getMessage());
+        }
         return Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(hash);
     }
 
-    public static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static boolean validatePassword(String originalPassword, String storedPassword) throws InternalException {
         String[] parts = storedPassword.split(":");
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         byte[] hash = Base64.getDecoder().decode(parts[1]);
-        byte[] testHash = pbkdf2(originalPassword.toCharArray(), salt);
+        byte[] testHash = null;
+        try {
+            testHash = pbkdf2(originalPassword.toCharArray(), salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new InternalException(e.getMessage());
+        }
         return slowEquals(hash, testHash);
     }
 

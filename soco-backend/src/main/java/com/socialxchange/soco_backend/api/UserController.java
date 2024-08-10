@@ -29,15 +29,11 @@ public class UserController {
             throw new InternalException("Wrong credentials");
         }
         else {
-            try {
-                if (Utility.validatePassword(user.getPassword(), userFound.getPasswordHash())) {
-                    return ResponseEntity.ok(new AuthToken("TOKEN"));
-                }
-                else {
-                    throw new InternalException("Wrong credentials");
-                }
-            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                throw new InternalException(e.getMessage());
+            if (Utility.validatePassword(user.getPassword(), userFound.getPasswordHash())) {
+                return ResponseEntity.ok(new AuthToken("TOKEN"));
+            }
+            else {
+                throw new InternalException("Wrong credentials");
             }
         }
     }
@@ -47,11 +43,7 @@ public class UserController {
         log.info("Register API called: Received: {}", user.getEmail());
         User newUser = new User();
         newUser.setEmail(user.getEmail());
-        try {
-            newUser.setPasswordHash(Utility.hashPassword(user.getPassword()));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new InternalException(e.getMessage());
-        }
+        newUser.setPasswordHash(Utility.hashPassword(user.getPassword()));
         return userRepository.save(newUser);
     }
 }

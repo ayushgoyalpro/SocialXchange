@@ -11,11 +11,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler {
+
     @ExceptionHandler(InternalException.class)
     public ResponseEntity<?> handleInternalException(InternalException e) {
         Exception exception = new Exception();
         exception.setMessage(e.getMessage());
         exception.setType("InternalException");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+    }
+
+    @ExceptionHandler(java.lang.Exception.class)
+    public ResponseEntity<?> handleException(java.lang.Exception e) {
+        Exception exception = new Exception();
+        exception.setMessage(e.getMessage());
+        exception.setType("Exception");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception);
     }
 }
