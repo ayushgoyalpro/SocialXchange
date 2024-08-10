@@ -1,19 +1,27 @@
 package com.socialxchange.soco_backend.config;
 
 import com.socialxchange.soco_backend.config.exceptions.InternalException;
+import io.jsonwebtoken.Jwts;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Date;
 
 public class Utility {
 
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
+    private static final String secret = "asdd9s9adu2901khbsd09U9us9jSIOPAJSajsjaShs091562";
+    private static final Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), "HmacSHA256");
 
     public static String hashPassword(String password) throws InternalException {
         byte[] salt = generateSalt();
@@ -58,5 +66,18 @@ public class Utility {
             diff |= a[i] ^ b[i];
         }
         return diff == 0;
+    }
+
+    public static String getJWT(Long id, String email) {
+        Instant now = Instant.now();
+        String jwtToken = Jwts.builder()
+                              .claim("email", email)
+                              .subject(email)
+                              .id(id.toString())
+                              .issuedAt(Date.from(now))
+                              .expiration(Date.from(now.plus(5L, ChronoUnit.DAYS)))
+                              .signWith(hmacKey)
+                              .compact();
+        return null;
     }
 }
