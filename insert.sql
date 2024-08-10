@@ -1,5 +1,5 @@
 -- Insert data into the Influencer table
-INSERT INTO Influencer (ig_username, name, email, mobile_number, password, followers, address, lat, lon, dob,
+INSERT INTO Influencer (ig_username, name, email, mobile_number, password_hash, followers, address, lat, lon, dob,
                         date_created)
 VALUES ('john_doe', 'John Doe', 'john@example.com', '555-1234', 'pass123', 10000, '123 Main St, Springfield', 37.7749,
         -122.4194, '1990-01-01', '2023-08-10'),
@@ -13,7 +13,7 @@ VALUES ('john_doe', 'John Doe', 'john@example.com', '555-1234', 'pass123', 10000
         48.8566, 2.3522, '1988-05-05', '2023-08-10');
 
 -- Insert data into the Business table
-INSERT INTO Business (name, email, password, business_type, ig_username, address, lat, lon, mobile_number, qr,
+INSERT INTO Business (name, email, password_hash, business_type, ig_username, address, lat, lon, mobile_number, qr,
                       date_created, status)
 VALUES ('TechWorld', 'info@techworld.com', 'techpass123', 'Technology', 'techworld_ig',
         '101 Innovation Way, Silicon Valley', 37.3875, -122.0575, '555-1111', 'qr_techworld', '2023-08-10', 'active'),
