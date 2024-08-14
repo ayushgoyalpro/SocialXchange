@@ -70,14 +70,17 @@ public class Utility {
 
     public static String getJWT(Long id, String email) {
         Instant now = Instant.now();
-        String jwtToken = Jwts.builder()
-                              .claim("email", email)
-                              .subject(email)
-                              .id(id.toString())
-                              .issuedAt(Date.from(now))
-                              .expiration(Date.from(now.plus(5L, ChronoUnit.DAYS)))
-                              .signWith(hmacKey)
-                              .compact();
+        return Jwts.builder()
+                   .claim("email", email)
+                   .subject(email)
+                   .id(id.toString())
+                   .issuedAt(Date.from(now))
+                   .expiration(Date.from(now.plus(1, ChronoUnit.FOREVER)))
+                   .signWith(hmacKey)
+                   .compact();
+    }
+
+    public static String verifyJWT(String jwt) throws InternalException {
         return null;
     }
 }
