@@ -34,12 +34,12 @@ public class GeneralController {
         Optional<Influencer> influencer = influencerRepository.findByEmail(user.getEmail());
         if (influencer.isPresent() && Utility.validatePassword(user.getPassword(), influencer.get().getPasswordHash())) {
             String jwt = Utility.getJWT(influencer.get().getId(), influencer.get().getEmail(), "influencer");
-            return ResponseEntity.ok(new AuthToken(jwt));
+            return ResponseEntity.ok(new AuthToken(jwt, "influencer"));
         } else {
             Optional<Business> business = businessRepository.findByEmail(user.getEmail());
             if (business.isPresent() && Utility.validatePassword(user.getPassword(), business.get().getPasswordHash())) {
                 String jwt = Utility.getJWT(business.get().getId(), business.get().getEmail(), "business");
-                return ResponseEntity.ok(new AuthToken(jwt));
+                return ResponseEntity.ok(new AuthToken(jwt, "business"));
             } else {
                 throw new InternalException("wrong_credentials");
             }

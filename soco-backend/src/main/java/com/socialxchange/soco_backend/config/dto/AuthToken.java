@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthToken {
     private String token;
+    private String intent;
 }
