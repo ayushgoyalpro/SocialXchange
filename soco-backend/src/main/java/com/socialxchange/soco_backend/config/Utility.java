@@ -1,5 +1,6 @@
 package com.socialxchange.soco_backend.config;
 
+import com.socialxchange.soco_backend.config.dto.User;
 import com.socialxchange.soco_backend.config.exceptions.InternalException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -71,10 +72,10 @@ public class Utility {
         return diff == 0;
     }
 
-    public static String getJWT(Long id, String email) {
+    public static String getJWT(Long id, String email, String userType) {
         Instant now = Instant.now();
         return Jwts.builder()
-                   .claim("email", email)
+                   .claim("userType", userType)
                    .subject(email)
                    .id(id.toString())
                    .issuedAt(Date.from(now))
@@ -83,16 +84,22 @@ public class Utility {
                    .compact();
     }
 
-    public static String verifyJWT(String Authorization) throws InternalException {
+    public static User verifyJWT(String Authorization) throws InternalException {
         try {
             String token = Authorization.split(" ")[1];
             Claims claims = Jwts.parser().verifyWith((SecretKey) hmacKey).build().parseSignedClaims(token).getPayload();
-            String uid = claims.getId();
+            Long id = Long.parseLong(claims.getId());
+            String email = claims.getSubject();
+            String userType = claims.get("userType", String.class);
             Date expDate = claims.getExpiration();
             if (!expDate.after(Date.from(Instant.now()))) {
                 throw new InternalException("expired_auth_token");
             }
-            return uid;
+            User user = new User();
+            user.setEmail(email);
+            user.setUserType(userType);
+            user.setId(id);
+            return user;
         } catch (Exception e) {
             throw new InternalException("invalid_auth_token");
         }
