@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -32,6 +34,13 @@ public class UserController {
                 throw new InternalException("wrong_credentials");
             }
         }
+    }
+
+    @GetMapping("/protected")
+    public ResponseEntity<User> protectedResource(@RequestHeader String Authorization) throws InternalException {
+        String uid = Utility.verifyJWT(Authorization);
+        Optional<User> user = userRepository.findById(Long.parseLong(uid));
+        return ResponseEntity.ok(user.orElse(null));
     }
 
     @PostMapping

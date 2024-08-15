@@ -1,8 +1,10 @@
 package com.socialxchange.soco_backend.config;
 
 import com.socialxchange.soco_backend.config.exceptions.InternalException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,9 +21,10 @@ public class Utility {
 
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
-    private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
+    private static final String PASSWORD_ALGORITHM = "PBKDF2WithHmacSHA256";
+    private static final String JWT_ALGORITHM = "HmacSHA256";
     private static final String secret = "asdd9s9adu2901khbsd09U9us9jSIOPAJSajsjaShs091562";
-    private static final Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), "HmacSHA256");
+    private static final Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), JWT_ALGORITHM);
 
     public static String hashPassword(String password) throws InternalException {
         byte[] salt = generateSalt();
@@ -49,7 +52,7 @@ public class Utility {
 
     private static byte[] pbkdf2(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, Utility.ITERATIONS, Utility.KEY_LENGTH);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance(PASSWORD_ALGORITHM);
         return skf.generateSecret(spec).getEncoded();
     }
 
@@ -75,12 +78,23 @@ public class Utility {
                    .subject(email)
                    .id(id.toString())
                    .issuedAt(Date.from(now))
-                   .expiration(Date.from(now.plus(1, ChronoUnit.FOREVER)))
+                   .expiration(Date.from(now.plus(5L, ChronoUnit.DAYS)))
                    .signWith(hmacKey)
                    .compact();
     }
 
-    public static String verifyJWT(String jwt) throws InternalException {
-        return null;
+    public static String verifyJWT(String Authorization) throws InternalException {
+        try {
+            String token = Authorization.split(" ")[1];
+            Claims claims = Jwts.parser().verifyWith((SecretKey) hmacKey).build().parseSignedClaims(token).getPayload();
+            String uid = claims.getId();
+            Date expDate = claims.getExpiration();
+            if (!expDate.after(Date.from(Instant.now()))) {
+                throw new InternalException("expired_auth_token");
+            }
+            return uid;
+        } catch (Exception e) {
+            throw new InternalException("invalid_auth_token");
+        }
     }
 }
