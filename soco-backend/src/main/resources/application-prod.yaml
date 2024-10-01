@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-crttcvm8ii6s73amjr8g-a:5432/soco
