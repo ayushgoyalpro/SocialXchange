@@ -2796,7 +2796,7 @@ a:hover {
 .footer-left-wrapper {
   max-width: 32rem;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   display: flex;
 }
 
@@ -2804,8 +2804,9 @@ a:hover {
   grid-column-gap: 8vw;
   grid-row-gap: 1rem;
   grid-template-rows: auto;
-  grid-template-columns: .75fr auto;
+  grid-template-columns: 1fr;
   align-items: center;
+  justify-items: center;
 }
 
 .layout-text-wrapper {
