@@ -2227,7 +2227,7 @@ a:hover {
 }
 
 .section.hero {
-  background-image: url("https://assets-global.website-files.com/650336fc11e3a48fd51877a7/650336fc11e3a48fd51877c4_Localization%20Demo.svg");
+  background-image: url("../img/Localization-Demo.svg");
   background-position: 0 100%;
   background-size: cover;
   padding-top: 64px;
@@ -2235,7 +2235,7 @@ a:hover {
 }
 
 .section.hero:lang(is) {
-  background-image: url("https://assets-global.website-files.com/650336fc11e3a48fd51877a7/650336fc11e3a48fd51877c4_Localization%20Demo.svg");
+  background-image: url("../img/Localization-Demo.svg");
   background-position: 0 100%;
   background-size: cover;
 }
@@ -2245,7 +2245,7 @@ a:hover {
 }
 
 .section.cta {
-  background-image: url("https://assets-global.website-files.com/650336fc11e3a48fd51877a7/650336fc11e3a48fd51877d0_Background-CTA2.svg");
+  background-image: url("../img/Background-CTA2.svg");
   background-position: 50% 100%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2820,7 +2820,7 @@ a:hover {
   grid-column-gap: 2rem;
   grid-row-gap: 2rem;
   background-color: rgba(255, 255, 255, .06);
-  background-image: url("https://assets-global.website-files.com/650336fc11e3a48fd51877a7/650336fc11e3a48fd51877cd_Background%20pattern%202%20.svg");
+  background-image: url("../img/Background-pattern-2.svg");
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: auto;
@@ -2889,7 +2889,7 @@ a:hover {
   grid-row-gap: 24px;
   border: 1px solid var(--border-radius);
   background-color: rgba(255, 255, 255, .06);
-  background-image: url("https://assets-global.website-files.com/650336fc11e3a48fd51877a7/650336fc11e3a48fd51877cd_Background%20pattern%202%20.svg");
+  background-image: url("../img/Background-pattern-2.svg");
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: auto;
