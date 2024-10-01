@@ -1,3 +1,6 @@
 spring:
   datasource:
     url: jdbc:postgresql://dpg-crttcvm8ii6s73amjr8g-a:5432/soco
+server:
+  address: 0.0.0.0
+  port: ${PORT:8080}
