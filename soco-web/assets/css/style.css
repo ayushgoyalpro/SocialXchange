@@ -504,13 +504,13 @@ button, [type="button"], [type="reset"] {
 
 .w-form-done {
   text-align: center;
-  background-color: #ddd;
+  /*background-color: #ddd;*/
   padding: 20px;
   display: none;
 }
 
 .w-form-fail {
-  background-color: #ffdede;
+  /*background-color: #ffdede;*/
   margin-top: 10px;
   padding: 10px;
   display: none;
@@ -2731,7 +2731,7 @@ a:hover {
 }
 
 .success-message {
-  background-color: #f4f4f4;
+  /*background-color: #f4f4f4;*/
   padding: 1.5rem;
 }
 

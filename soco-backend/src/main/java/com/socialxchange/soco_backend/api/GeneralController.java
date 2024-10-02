@@ -12,10 +12,7 @@ import com.socialxchange.soco_backend.config.dto.User;
 import com.socialxchange.soco_backend.config.exceptions.InternalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -34,6 +31,7 @@ public class GeneralController {
     }
 
     @PostMapping("/subscribe")
+    @CrossOrigin(origins = "http://localhost:8181")
     public ResponseEntity<Object> subscribe(@RequestBody String body) {
         log.info("SUBSCRIBE: {}", body);
         Subscriber s = new Subscriber();

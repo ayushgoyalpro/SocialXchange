@@ -12705,46 +12705,46 @@
             exports.default = hostedSubmitWebflow;
 
             function hostedSubmitWebflow(reset, loc, Webflow, collectEnterpriseTrackingCookies, preventDefault, findFields, alert, findFileUploads, disableBtn, siteId, afterSubmit, $, formUrl) {
-                return function (data) {
-                    reset(data);
-                    var form = data.form;
-                    var payload = {
-                        name: form.attr("data-name") || form.attr("name") || "Untitled Form",
-                        pageId: form.attr("data-wf-page-id") || "",
-                        elementId: form.attr("data-wf-element-id") || "",
-                        source: loc.href,
-                        test: Webflow.env(),
-                        fields: {},
-                        fileUploads: {},
-                        dolphin: /pass[\s-_]?(word|code)|secret|login|credentials/i.test(form.html()),
-                        trackingCookies: collectEnterpriseTrackingCookies()
-                    };
-                    const wfFlow = form.attr("data-wf-flow");
-                    if (wfFlow) {
-                        payload.wfFlow = wfFlow;
-                    }
-                    preventDefault(data);
-                    var status = findFields(form, payload.fields);
-                    if (status) {
-                        return alert(status);
-                    }
-                    payload.fileUploads = findFileUploads(form);
-                    disableBtn(data);
-                    if (!siteId) {
-                        afterSubmit(data);
-                        return;
-                    }
-                    $.ajax({
-                        url: formUrl, type: "POST", data: payload, dataType: "json", crossDomain: true
-                    }).done(function (response) {
-                        if (response && response.code === 200) {
-                            data.success = true;
-                        }
-                        afterSubmit(data);
-                    }).fail(function () {
-                        afterSubmit(data);
-                    });
-                };
+                // return function (data) {
+                //     reset(data);
+                //     var form = data.form;
+                //     var payload = {
+                //         name: form.attr("data-name") || form.attr("name") || "Untitled Form",
+                //         pageId: form.attr("data-wf-page-id") || "",
+                //         elementId: form.attr("data-wf-element-id") || "",
+                //         source: loc.href,
+                //         test: Webflow.env(),
+                //         fields: {},
+                //         fileUploads: {},
+                //         dolphin: /pass[\s-_]?(word|code)|secret|login|credentials/i.test(form.html()),
+                //         trackingCookies: collectEnterpriseTrackingCookies()
+                //     };
+                //     const wfFlow = form.attr("data-wf-flow");
+                //     if (wfFlow) {
+                //         payload.wfFlow = wfFlow;
+                //     }
+                //     preventDefault(data);
+                //     var status = findFields(form, payload.fields);
+                //     if (status) {
+                //         return alert(status);
+                //     }
+                //     payload.fileUploads = findFileUploads(form);
+                //     disableBtn(data);
+                //     if (!siteId) {
+                //         afterSubmit(data);
+                //         return;
+                //     }
+                //     $.ajax({
+                //         url: formUrl, type: "POST", data: payload, dataType: "json", crossDomain: true
+                //     }).done(function (response) {
+                //         if (response && response.code === 200) {
+                //             data.success = true;
+                //         }
+                //         afterSubmit(data);
+                //     }).fail(function () {
+                //         afterSubmit(data);
+                //     });
+                // };
             }
         }
     });
@@ -12782,7 +12782,7 @@
 
                 function init() {
                     siteId = $("html").attr("data-wf-site");
-                    formUrl = "https://webflow.com/api/v1/form/" + siteId;
+                    formUrl = "" + siteId;
                     if (retro && formUrl.indexOf("https://webflow.com") >= 0) {
                         formUrl = formUrl.replace("https://webflow.com", "https://formdata.webflow.com");
                     }
