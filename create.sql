@@ -32,3 +32,10 @@ CREATE TABLE vTransactions
     amount        FLOAT NOT NULL,
     timestamp     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE MailList
+(
+    id        SERIAL PRIMARY KEY,
+    email     VARCHAR(255) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

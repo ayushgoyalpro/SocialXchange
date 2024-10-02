@@ -3,14 +3,17 @@ package com.socialxchange.soco_backend.api;
 import com.socialxchange.soco_backend.config.Utility;
 import com.socialxchange.soco_backend.config.database.entities.Business;
 import com.socialxchange.soco_backend.config.database.entities.Influencer;
+import com.socialxchange.soco_backend.config.database.entities.Subscriber;
 import com.socialxchange.soco_backend.config.database.repositories.BusinessRepository;
 import com.socialxchange.soco_backend.config.database.repositories.InfluencerRepository;
+import com.socialxchange.soco_backend.config.database.repositories.MailListRepository;
 import com.socialxchange.soco_backend.config.dto.AuthToken;
 import com.socialxchange.soco_backend.config.dto.User;
 import com.socialxchange.soco_backend.config.exceptions.InternalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,10 +25,21 @@ public class GeneralController {
 
     private final InfluencerRepository influencerRepository;
     private final BusinessRepository businessRepository;
+    private final MailListRepository mailListRepository;
 
-    public GeneralController(InfluencerRepository influencerRepository, BusinessRepository businessRepository) {
+    public GeneralController(InfluencerRepository influencerRepository, BusinessRepository businessRepository, MailListRepository mailListRepository) {
         this.influencerRepository = influencerRepository;
         this.businessRepository = businessRepository;
+        this.mailListRepository = mailListRepository;
+    }
+
+    @PostMapping("/subscribe")
+    public ResponseEntity<Object> subscribe(@RequestBody String body) {
+        log.info("SUBSCRIBE: {}", body);
+        Subscriber s = new Subscriber();
+        s.setEmail(body);
+        mailListRepository.save(s);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/login")
