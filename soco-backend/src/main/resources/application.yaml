@@ -2,8 +2,6 @@ spring:
   application:
     name: SoCo Backend
   datasource:
-    username: app
-    password: oDrbXNeK7YcyqI9ne9Atq0SI1E1rLDvX
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
